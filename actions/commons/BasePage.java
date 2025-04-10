@@ -56,9 +56,10 @@ public class BasePage {
         }
     }
 
-   // public String getElementAttribue(WebDriver driver, String locator, String attributeName) {
-     //   String attribute = getElement(driver, locator).getAttribute(attributeName);
-     //   return attribute;}
+   public String getElementAttribue(WebDriver driver, String locator, String attributeName) {
+     String attribute = getElement(driver, locator).getDomAttribute(attributeName);
+     return attribute;
+    }
     public String getCssValue(WebDriver driver, String locator , String propertyName) {
         return getElement(driver,locator).getCssValue(propertyName);
     }

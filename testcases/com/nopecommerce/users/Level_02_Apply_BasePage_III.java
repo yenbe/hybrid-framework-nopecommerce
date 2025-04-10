@@ -35,6 +35,7 @@ public class Level_02_Apply_BasePage_III extends BasePage {
         Assert.assertEquals(getTextElement(driver,"//span[@id='LastName-error']"),"Last name is required.");
 
     }
+
     @AfterClass
     public void quitBrowser(){
         driver.quit();

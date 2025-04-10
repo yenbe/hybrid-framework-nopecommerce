@@ -3,8 +3,7 @@
 <suite name="NopCommerce UI Automation" verbose="1" >
     <test name="Run on Edge" >
         <classes>
-            <class name="com.nopecommerce.users.Level_02_Apply_BasePage_III" />
-            <class name="com.nopecommerce.users.Level_02_Apply_BasePage_II" />
+            <class name="com.nopecommerce.users.Level_03_PageObject" />
         </classes>
     </test>
 </suite>
