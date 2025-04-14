@@ -1,6 +1,6 @@
 package com.nopecommerce.users;
 
-import commons.BasePage;
+import commons.BaseTest;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
@@ -8,19 +8,17 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import pageObjects.CustomerInfoPageObject;
-import pageObjects.HomePageObject;
-import pageObjects.LoginPageObject;
-import pageObjects.RegisterPageObject;
-import pageUIs.CustomerPageUI;
+import pageObjects.nopCommerce.CustomerInfoPageObject;
+import pageObjects.nopCommerce.HomePageObject;
+import pageObjects.nopCommerce.LoginPageObject;
+import pageObjects.nopCommerce.RegisterPageObject;
 
 import java.time.Duration;
-import java.util.Random;
 
-public class Level_03_PageObject extends BasePage {
+public class Level_03_PageObject extends BaseTest {
 
     WebDriver driver;
-    String email = "yen" + new Random().nextInt(999) + "@gmail.com";
+    String email = "yen" + generateFakeNumber() + "@gmail.com";
     HomePageObject homePage;
     LoginPageObject loginPage;
     RegisterPageObject registerPage;
@@ -37,7 +35,7 @@ public class Level_03_PageObject extends BasePage {
         password = "yen123@yen";
         driver = new EdgeDriver(edgeOptions);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
-        openUrl(driver, "https://demo.nopcommerce.com/");
+        driver.get("https://demo.nopcommerce.com/");
         homePage = new HomePageObject(driver);
     }
 

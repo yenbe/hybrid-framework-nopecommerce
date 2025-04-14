@@ -133,12 +133,6 @@ public class BasePage {
     }
 
 
-
-
-
-
-
-
     public void sleepInSecond(long timeInSecond)  {
         try {
             Thread.sleep(timeInSecond);
