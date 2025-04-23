@@ -3,7 +3,9 @@ package commons;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.safari.SafariDriver;
 
 import java.time.Duration;
 import java.util.Random;
@@ -12,15 +14,22 @@ public class BaseTest {
 
     private WebDriver driver;
     protected WebDriver getBrowserDriver(String url, String browserName) {
-        switch (browserName) {
-            case "edge":
-                driver = new EdgeDriver();
+        BrowserType browserType = BrowserType.valueOf(browserName.toUpperCase());
+        switch (browserType) {
+            case EDGE:
+                EdgeOptions edgeOptions = new EdgeOptions();
+                edgeOptions.addArguments("--user-data-dir=C:/Users/Admin/AppData/Local/Microsoft/Edge/User Data/");
+                edgeOptions.addArguments("--profile-directory=Profile 1");
+                driver = new EdgeDriver(edgeOptions);
                 break;
-            case "chrome":
+            case CHROME:
                 driver = new ChromeDriver();
                 break;
-            case "firefox":
+            case FIREFOX:
                 driver = new FirefoxDriver();
+                break;
+            case SAFARI:
+                driver = new SafariDriver();
                 break;
             default:
                 throw new IllegalArgumentException("Browser name is not valid");

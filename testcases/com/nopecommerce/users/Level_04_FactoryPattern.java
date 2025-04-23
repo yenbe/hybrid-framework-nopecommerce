@@ -7,15 +7,13 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import pageObjects.nopCommerce.CustomerInforPageObject;
-import pageObjects.nopCommerce.HomePageObject;
-import pageObjects.nopCommerce.LoginPageObject;
-import pageObjects.nopCommerce.RegisterPageObject;
+import pageObjects.nopCommerce.*;
 
 import java.time.Duration;
 
-public class Level_03_PageObject extends BaseTest {
+public class Level_04_FactoryPattern extends BaseTest {
 
     WebDriver driver;
     String email = "yen" + generateFakeNumber() + "@gmail.com";
@@ -25,25 +23,23 @@ public class Level_03_PageObject extends BaseTest {
     CustomerInforPageObject customerPage;
     String firstName, lastName, password;
 
+    @Parameters({"url", "browser"})
     @BeforeClass
-    public void beforeClass() {
-        EdgeOptions edgeOptions = new EdgeOptions();
-        edgeOptions.addArguments("--user-data-dir=C:/Users/Admin/AppData/Local/Microsoft/Edge/User Data/");
-        edgeOptions.addArguments("--profile-directory=Profile 1");
+    public void beforeClass(String urlValue, String browserName) {
+        driver = getBrowserDriver(urlValue, browserName);
+
+
         firstName = "Yen";
         lastName = "Dao";
         password = "yen123@yen";
-        driver = new EdgeDriver(edgeOptions);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
-        driver.get("https://demo.nopcommerce.com/");
-        homePage = new HomePageObject(driver);
+        homePage = (HomePageObject) PageManager.getPage(driver, "HomePage");
     }
 
     @Test
     public void TC_01_Register() {
         homePage.clickToRegisterLink();
         // Tu page A sang B (Home sang Register) : khoi tao
-        registerPage = new RegisterPageObject(driver);
+        registerPage = (RegisterPageObject) PageManager.getPage(driver, "RegisterPage");
 
         registerPage.sendkeysToFirstNameTextbox(firstName);
         registerPage.sendkeysToLastNameTextbox(lastName);
@@ -55,7 +51,7 @@ public class Level_03_PageObject extends BaseTest {
         Assert.assertEquals(registerPage.getRegisterSuccessMessage(), "Your registration completed");
         registerPage.clickLogoutLink();
 
-        homePage = new HomePageObject(driver);
+        homePage = (HomePageObject) PageManager.getPage(driver, "HomePage");
 
     }
     @Test
@@ -63,13 +59,13 @@ public class Level_03_PageObject extends BaseTest {
 
         homePage.clickLoginLink();
 
-        loginPage = new LoginPageObject(driver);
+        loginPage = (LoginPageObject) PageManager.getPage(driver, "LoginPage");
 
         loginPage.sendkeyToEmailTextbox(email);
         loginPage.sendkeyToPasswordTextbox(password);
         loginPage.clickToLoginButton();
 
-        homePage = new HomePageObject(driver);
+        homePage = (HomePageObject) PageManager.getPage(driver, "HomePage");
 
     }
     @Test
@@ -77,12 +73,13 @@ public class Level_03_PageObject extends BaseTest {
 
         homePage.clickMyAccountLink();
 
-        customerPage = new CustomerInforPageObject(driver);
+        customerPage = (CustomerInforPageObject) PageManager.getPage(driver,"CustomerInfor");
         Assert.assertEquals(customerPage.getFirstNameTextboxValue(),firstName);
         Assert.assertEquals(customerPage.getLastNameTextboxValue(),lastName);
         Assert.assertEquals(customerPage.getEmailTextboxValue(),email);
 
     }
+    
 
     @AfterClass
     public void quitBrowser(){

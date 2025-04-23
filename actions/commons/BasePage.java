@@ -20,7 +20,21 @@ public class BasePage {
     public void openUrl(WebDriver driver, String pageUrl) {
         driver.get(pageUrl);
     }
-
+    private Alert waitToAlertPresence(WebDriver driver) {
+        return new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.alertIsPresent());
+    }
+    public void acceptAlert(WebDriver driver) {
+        waitToAlertPresence(driver).accept();
+    }
+    public void cancelAlert(WebDriver driver) {
+        waitToAlertPresence(driver).dismiss();
+    }
+    public void sendkeyTolAlert(WebDriver driver, String valueToSend) {
+        waitToAlertPresence(driver).sendKeys(valueToSend);
+    }
+    public String getlAlertText(WebDriver driver) {
+        return waitToAlertPresence(driver).getText();
+    }
     public void clickToElement(WebDriver driver, String locator) {
         getElement(driver,locator).click();
     }

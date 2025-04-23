@@ -7,15 +7,17 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import pageObjects.nopCommerce.CustomerInforPageObject;
-import pageObjects.nopCommerce.HomePageObject;
-import pageObjects.nopCommerce.LoginPageObject;
-import pageObjects.nopCommerce.RegisterPageObject;
+import pageFactory.nopCommerce.CustomerInforPageObject;
+import pageFactory.nopCommerce.HomePageObject;
+import pageFactory.nopCommerce.LoginPageObject;
+import pageFactory.nopCommerce.RegisterPageObject;
+
 
 import java.time.Duration;
 
-public class Level_03_PageObject extends BaseTest {
+public class Level_05_Page_Factory extends BaseTest {
 
     WebDriver driver;
     String email = "yen" + generateFakeNumber() + "@gmail.com";
@@ -25,17 +27,15 @@ public class Level_03_PageObject extends BaseTest {
     CustomerInforPageObject customerPage;
     String firstName, lastName, password;
 
+    @Parameters({"url", "browser"})
     @BeforeClass
-    public void beforeClass() {
-        EdgeOptions edgeOptions = new EdgeOptions();
-        edgeOptions.addArguments("--user-data-dir=C:/Users/Admin/AppData/Local/Microsoft/Edge/User Data/");
-        edgeOptions.addArguments("--profile-directory=Profile 1");
+    public void beforeClass(String urlValue, String browserName) {
+        driver = getBrowserDriver(urlValue, browserName);
+
+
         firstName = "Yen";
         lastName = "Dao";
         password = "yen123@yen";
-        driver = new EdgeDriver(edgeOptions);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
-        driver.get("https://demo.nopcommerce.com/");
         homePage = new HomePageObject(driver);
     }
 

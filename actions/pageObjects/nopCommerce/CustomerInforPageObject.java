@@ -4,10 +4,10 @@ import commons.BasePage;
 import org.openqa.selenium.WebDriver;
 import pageUIs.nopCommerce.CustomerPageUI;
 
-public class CustomerInfoPageObject extends BasePage {
+public class CustomerInforPageObject extends BasePage {
     private WebDriver driver;
 
-    public CustomerInfoPageObject(WebDriver driver) {
+    public CustomerInforPageObject(WebDriver driver) {
         this.driver = driver;
     }
 
