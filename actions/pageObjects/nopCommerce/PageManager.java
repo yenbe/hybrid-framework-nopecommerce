@@ -1,6 +1,7 @@
 package pageObjects.nopCommerce;
 
 import org.openqa.selenium.WebDriver;
+import pageObjects.nopCommerce.sideBar.CustomerInforPageObject;
 
 public class PageManager {
 
@@ -8,13 +9,13 @@ public class PageManager {
     public static Object getPage(WebDriver driver , String pageName) {
         switch (pageName) {
             case "HomePage":
-                return new HomePageObject(driver);
+                return new UserHomePageObject(driver);
             case "LoginPage":
-                return new LoginPageObject(driver);
+                return new UserLoginPageObject(driver);
             case "CustomerInfor":
                 return new CustomerInforPageObject(driver);
             case "RegisterPage":
-                return new RegisterPageObject(driver);
+                return new UserRegisterPageObject(driver);
             default:
                 return new IllegalArgumentException("Page Name is not valid");
         }

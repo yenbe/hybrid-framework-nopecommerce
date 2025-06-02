@@ -8,10 +8,10 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import pageObjects.nopCommerce.CustomerInforPageObject;
-import pageObjects.nopCommerce.HomePageObject;
-import pageObjects.nopCommerce.LoginPageObject;
-import pageObjects.nopCommerce.RegisterPageObject;
+import pageObjects.nopCommerce.sideBar.CustomerInforPageObject;
+import pageObjects.nopCommerce.UserHomePageObject;
+import pageObjects.nopCommerce.UserLoginPageObject;
+import pageObjects.nopCommerce.UserRegisterPageObject;
 
 import java.time.Duration;
 
@@ -19,9 +19,9 @@ public class Level_03_PageObject extends BaseTest {
 
     WebDriver driver;
     String email = "yen" + generateFakeNumber() + "@gmail.com";
-    HomePageObject homePage;
-    LoginPageObject loginPage;
-    RegisterPageObject registerPage;
+    UserHomePageObject homePage;
+    UserLoginPageObject loginPage;
+    UserRegisterPageObject registerPage;
     CustomerInforPageObject customerPage;
     String firstName, lastName, password;
 
@@ -36,14 +36,14 @@ public class Level_03_PageObject extends BaseTest {
         driver = new EdgeDriver(edgeOptions);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
         driver.get("https://demo.nopcommerce.com/");
-        homePage = new HomePageObject(driver);
+        homePage = new UserHomePageObject(driver);
     }
 
     @Test
     public void TC_01_Register() {
         homePage.clickToRegisterLink();
         // Tu page A sang B (Home sang Register) : khoi tao
-        registerPage = new RegisterPageObject(driver);
+        registerPage = new UserRegisterPageObject(driver);
 
         registerPage.sendkeysToFirstNameTextbox(firstName);
         registerPage.sendkeysToLastNameTextbox(lastName);
@@ -53,9 +53,9 @@ public class Level_03_PageObject extends BaseTest {
         registerPage.clickToRegisterButton();
 
         Assert.assertEquals(registerPage.getRegisterSuccessMessage(), "Your registration completed");
-        registerPage.clickLogoutLink();
+        registerPage.clickLogoutLinkAtUserSite(driver);
 
-        homePage = new HomePageObject(driver);
+        homePage = new UserHomePageObject(driver);
 
     }
     @Test
@@ -63,20 +63,19 @@ public class Level_03_PageObject extends BaseTest {
 
         homePage.clickLoginLink();
 
-        loginPage = new LoginPageObject(driver);
+        loginPage = new UserLoginPageObject(driver);
 
         loginPage.sendkeyToEmailTextbox(email);
         loginPage.sendkeyToPasswordTextbox(password);
         loginPage.clickToLoginButton();
 
-        homePage = new HomePageObject(driver);
+        homePage = new UserHomePageObject(driver);
 
     }
     @Test
     public void TC_03_MyAccount() {
 
-        homePage.clickMyAccountLink();
-
+        homePage.clickMyAccountLinkAtUserSite(driver);
         customerPage = new CustomerInforPageObject(driver);
         Assert.assertEquals(customerPage.getFirstNameTextboxValue(),firstName);
         Assert.assertEquals(customerPage.getLastNameTextboxValue(),lastName);

@@ -1,4 +1,4 @@
-package pageUIs.nopCommerce;
+package pageUIs.nopCommerce.sideBar;
 
 public class CustomerPageUI {
     public static final String FIRST_NAME_TEXTBOX = "//input[@id='FirstName']";

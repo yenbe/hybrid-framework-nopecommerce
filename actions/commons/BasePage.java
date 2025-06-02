@@ -3,9 +3,13 @@ package commons;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import pageObjects.nopCommerce.*;
+import pageObjects.nopCommerce.sideBar.CustomerInforPageObject;
+import pageUIs.nopCommerce.BasePageUI;
 
 import java.time.Duration;
 import java.util.List;
@@ -155,6 +159,21 @@ public class BasePage {
         }
     }
 
+    public CustomerInforPageObject clickMyAccountLinkAtUserSite(WebDriver driver) {
+        waitForElementClickable(driver, BasePageUI.USER_MYACCOUNT_LINK);
+        clickToElement(driver, BasePageUI.USER_MYACCOUNT_LINK);
+        return PageGenerator.getPageInstance(CustomerInforPageObject.class,driver);
+    }
+    public UserHomePageObject clickLogoutLinkAtUserSite(WebDriver driver) {
+        waitForElementClickable(driver, BasePageUI.USER_LOGOUT_LINK);
+        clickToElement(driver, BasePageUI.USER_LOGOUT_LINK);
+        return PageGenerator.getPageInstance(UserHomePageObject.class,driver);
+    }
+    public AdminLoginPageObject clickLogoutLinkAtAdminSite(WebDriver driver) {
+        waitForElementClickable(driver, BasePageUI.ADMIN_LOGOUT_LINK);
+        clickToElement(driver, BasePageUI.ADMIN_LOGOUT_LINK);
+        return PageGenerator.getPageInstance(AdminLoginPageObject.class,driver);
+    }
     public By getByXpath(String locator) {
         return By.xpath(locator);
     }
@@ -162,6 +181,47 @@ public class BasePage {
         return driver.findElement(getByXpath(locator));
     }
 
+    public AdminLoginPageObject openAdminSite(WebDriver driver, String adminUrl) {
+        openUrl(driver,adminUrl);
+        return PageGenerator.getPageInstance(AdminLoginPageObject.class, driver);
+    }
+
+    public AdminProductPageObject openAdminProductPage(WebDriver driver) {
+        String attributeValue = getElementAttribue(driver,BasePageUI.ADMIN_PRODUCT_MENU,"class");
+        if (!attributeValue.endsWith("menu-is-opening menu-open")) {
+            waitForElementClickable(driver, BasePageUI.ADMIN_PRODUCT_MENU);
+            clickToElement(driver, BasePageUI.ADMIN_PRODUCT_MENU);
+        }
+        waitForElementClickable(driver, BasePageUI.ADMIN_PRODUCT_SUBMENU);
+        clickToElement(driver, BasePageUI.ADMIN_PRODUCT_SUBMENU);
+
+        return PageGenerator.getPageInstance(AdminProductPageObject.class,driver);
+    }
+
+    public boolean isPageLoadedSuccess(WebDriver driver) {
+        WebDriverWait explicitWait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+        ExpectedCondition<Boolean> jQueryLoad = new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver driver) {
+                return (Boolean) jsExecutor.executeScript("return (window.jQuery != null) && (jQuery.active === 0);");
+            }
+        };
+
+        ExpectedCondition<Boolean> jsLoad = new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver driver) {
+                return jsExecutor.executeScript("return document.readyState").toString().equals("complete");
+            }
+        };
+        return explicitWait.until(jQueryLoad) && explicitWait.until(jsLoad);
+    }
+
     private long LONG_TIMEOUT = 30;
 
+
+    public UserHomePageObject openUserSite(WebDriver driver, String userUrl) {
+        openUrl(driver, userUrl);
+        return PageGenerator.getPageInstance(UserHomePageObject.class,driver);
+    }
 }

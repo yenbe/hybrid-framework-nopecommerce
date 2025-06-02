@@ -1,13 +1,13 @@
-package pageObjects.nopCommerce;
+package pageObjects.nopCommerce.sideBar;
 
-import commons.BasePage;
 import org.openqa.selenium.WebDriver;
-import pageUIs.nopCommerce.CustomerPageUI;
+import pageUIs.nopCommerce.sideBar.CustomerPageUI;
 
-public class CustomerInforPageObject extends BasePage {
+public class CustomerInforPageObject extends SidebarPageObject {
     private WebDriver driver;
 
     public CustomerInforPageObject(WebDriver driver) {
+        super(driver);
         this.driver = driver;
     }
 
@@ -25,4 +25,6 @@ public class CustomerInforPageObject extends BasePage {
         waitForElementVisible(driver, CustomerPageUI.EMAIL_TEXTBOX);
         return getElementAttribue(driver, CustomerPageUI.EMAIL_TEXTBOX, "value");
     }
+
+
 }
