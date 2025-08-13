@@ -25,7 +25,7 @@ public class BasePage {
         driver.get(pageUrl);
     }
     private Alert waitToAlertPresence(WebDriver driver) {
-        return new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.alertIsPresent());
+        return new WebDriverWait(driver, Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT)).until(ExpectedConditions.alertIsPresent());
     }
     public void acceptAlert(WebDriver driver) {
         waitToAlertPresence(driver).accept();
@@ -51,7 +51,7 @@ public class BasePage {
         getElement(driver,locator).sendKeys(textSendkey);
     }
     public List<WebElement> getListElement(WebDriver driver, String locator) {
-        return driver.findElements(getByXpath(locator));
+        return driver.findElements(getByLocator(locator));
     }
     public String getSelectedItemInDropdown(WebDriver driver, String locator) {
         return new Select(getElement(driver,locator)).getFirstSelectedOption().getText();
@@ -61,7 +61,7 @@ public class BasePage {
     }
 
     private void selectCustomDropdown(WebDriver driver, String parentXpath, String childXpath, String textItem) throws InterruptedException {
-        WebDriverWait explicitWait = new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT));
+        WebDriverWait explicitWait = new WebDriverWait(driver, Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
         explicitWait.until(ExpectedConditions.elementToBeClickable(By.xpath(parentXpath))).click();
         sleepInSecond(2);
 
@@ -138,18 +138,17 @@ public class BasePage {
         return getElement(driver,locator).getText();
     }
     public void waitForElementVisible(WebDriver driver, String locator) {
-        new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.visibilityOfElementLocated(getByXpath(locator)));
+        new WebDriverWait(driver, Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT)).until(ExpectedConditions.visibilityOfElementLocated(getByLocator(locator)));
     }
     public void waitForListElementVisible(WebDriver driver, String locator) {
-        new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(getByXpath(locator)));
+        new WebDriverWait(driver, Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT)).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(getByLocator(locator)));
     }
     public void waitForElementInvisible(WebDriver driver, String locator) {
-        new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.invisibilityOfElementLocated(getByXpath(locator)));
+        new WebDriverWait(driver, Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT)).until(ExpectedConditions.invisibilityOfElementLocated(getByLocator(locator)));
     }
     public void waitForElementClickable(WebDriver driver, String locator) {
-        new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.elementToBeClickable(getByXpath(locator)));
+        new WebDriverWait(driver, Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT)).until(ExpectedConditions.elementToBeClickable(getByLocator(locator)));
     }
-
 
     public void sleepInSecond(long timeInSecond)  {
         try {
@@ -177,8 +176,30 @@ public class BasePage {
     public By getByXpath(String locator) {
         return By.xpath(locator);
     }
+
+    public By getByLocator(String locator) {
+        if (locator.isEmpty() || locator == null) {
+            throw new RuntimeException("Locator type cannot be null or empty");
+        }
+
+        switch (locator.split("=")[0].toLowerCase()) {
+            case "xpath":
+                return By.xpath(locator.substring(6));
+            case "css":
+                return By.cssSelector(locator.substring(4));
+            case "id":
+                return By.id(locator.substring(3));
+            case "name":
+                return By.name(locator.substring(5));
+            case "class":
+                return By.className(locator.substring(6));
+            default:
+                throw new InvalidArgumentException("Locator type is not support.");
+        }
+    }
+
     public WebElement getElement(WebDriver driver, String locator) {
-        return driver.findElement(getByXpath(locator));
+        return driver.findElement(getByLocator(locator));
     }
 
     public AdminLoginPageObject openAdminSite(WebDriver driver, String adminUrl) {
@@ -216,8 +237,6 @@ public class BasePage {
         };
         return explicitWait.until(jQueryLoad) && explicitWait.until(jsLoad);
     }
-
-    private long LONG_TIMEOUT = 30;
 
 
     public UserHomePageObject openUserSite(WebDriver driver, String userUrl) {

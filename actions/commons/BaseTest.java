@@ -13,6 +13,8 @@ import java.util.Random;
 public class BaseTest {
 
     private WebDriver driver;
+
+    // DEV Enviroment
     protected WebDriver getBrowserDriver(String url, String browserName) {
         BrowserType browserType = BrowserType.valueOf(browserName.toUpperCase());
         switch (browserType) {
@@ -36,7 +38,7 @@ public class BaseTest {
         }
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
-        driver.get(url);
+        driver.get(GlobalConstants.DEV_URL);
         return driver;
     }
     protected void closeBrowser() {
